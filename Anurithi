@@ -1,0 +1,233 @@
+CREATE database agil_db;
+USE agil_db;
+CREATE table dept(
+    dept_id int primary key,
+    dept_name varchar(50),
+    location varchar(50)
+);
+CREATE table emp(
+    emp_id int primary key,
+    first_name varchar(50),
+    last_name varchar(50),
+    dept_id int,
+    salary decimal(10,2),
+    hire_date date;
+    foreing key(dept_id),
+    references dept(dept_id)
+);
+INSERT INTO dept
+VALUES
+(1, 'Sales', 'Chennai'),
+(2, 'HR', 'Bangalore'),
+(3, 'IT', 'Chennai'),
+(4, 'Finance', 'Mumbai'),
+(5, 'Marketing', 'Hyderabad'),
+(6, 'Research', 'Bangalore'),
+(7, 'Quality Assurance', 'Chennai'),
+(8, 'Production', 'Pune'),
+(9, 'Operations', 'Delhi'),
+(10, 'Legal', 'Mumbai'),
+(11, 'Customer Support', 'Chennai'),
+(12, 'Administration', 'Bangalore'),
+(13, 'Research and Development', 'Pune'),
+(14, 'Engineering', 'Hyderabad'),
+(15, 'Procurement', 'Delhi'),
+(16, 'Logistics', 'Mumbai'),
+(17, 'Training', 'Chennai'),
+(18, 'Data Analytics', 'Bangalore'),
+(19, 'Compliance', 'Hyderabad'),
+(20, 'Information Security', 'Pune');
+
+INSERT INTO emp
+VALUES
+(101, 'Anu', 'Kumar', 1, 45000, '2021-05-10'),
+(102, 'Priya', 'Sharma', 2, 55000, '2022-03-15'),
+(103, 'Rahul', 'Raj', 3, 75000, '2019-07-20'),
+(104, 'Karthik', 'Rao', 1, 65000, '2020-02-11'),
+(105, 'Divya', 'Sundar', 2, 48000, '2023-01-05'),
+(106, 'Arun', 'Kumar', 4, 80000, '2018-06-12'),
+(107, 'Sneha', 'Reddy', 5, 62000, '2021-09-18'),
+(108, 'Vijay', 'Kumar', 6, 72000, '2022-11-25'),
+(109, 'Meena', 'Raj', 7, 58000, '2020-08-14'),
+(110, 'Suresh', 'Babu', 8, 67000, '2019-04-22'),
+(111, 'Nisha', 'Devi', 9, 52000, '2023-05-16'),
+(112, 'Ajay', 'Kumar', 10, 90000, '2017-12-01'),
+(113, 'Swathi', 'Rao', 11, 40000, '2024-02-19'),
+(114, 'Manoj', 'Raj', 12, 56000, '2021-06-30'),
+(115, 'Keerthi', 'Das', 13, 85000, '2018-09-09'),
+(116, 'Praveen', 'Kumar', 14, 68000, '2022-04-17'),
+(117, 'Lakshmi', 'Devi', 15, 49000, '2023-08-21'),
+(118, 'Ramesh', 'Rao', 16, 73000, '2019-10-10'),
+(119, 'Pooja', 'Sharma', 17, 61000, '2020-12-05'),
+(120, 'Gokul', 'Raj', 18, 95000, '2016-03-25');
+
+-- total dept 
+SELECT COUNT(*) FROM dept;
+
+-- total emp
+SELECT COUNT(*) FROM emp;
+
+-- Retrieve all employees
+SELECT * FROM emp
+
+-- Retrieve employees from the Sales department
+SELECT e.*
+FROM emp e
+JOIN dept d
+on e.dept_id=d.dept_id
+where dept_name= 'Sales';
+
+-- Retrieve employees with salary greater than 60000
+SELECT *
+FROM employees
+WHERE salary > 60000;
+
+-- Retrieve employees hired after 2020-01-01
+SELECT *
+FROM employees
+WHERE hire_date > '2020-01-01';
+
+-- Retrieve employees from Sales or HR departments
+SELECT e.*
+FROM employees e
+JOIN departments d
+ON e.department_id = d.department_id
+WHERE d.department_name IN ('Sales', 'HR');
+
+use agil_db;
+select * from emp
+order by Salary desc
+limit 5;
+
+-- bottom 5 lowest paid employees
+select* from emp
+order by salary asc
+limit 5;
+
+-- employees sorted by name A to Z
+select* from emp
+order by first_name asc;
+
+-- top 3 employees hired recently
+select * from emp
+order by hire_date desc
+limit 3;
+
+-- total emp in the company
+select count(*) from emp;
+
+-- average salary of all emp
+select avg(Salary)
+from emp;
+
+-- minimum and maximum salary
+select min(salary) as min_salary, max(salary) as max_salary from emp;
+
+-- total salary expense of the company
+select sum(salary) as total_salary from emp;
+
+-- avg salary for each dept
+select dept_id, avg(salary)
+from emp
+group by dept_id;
+
+-- dept with more than 2 emp
+select dept_id, count(emp_id)
+from emp
+group by dept_id
+having count(emp_id)>2;
+
+-- dept with avg salary greater than 60000
+select dept_id, avg(salary)
+from emp
+group by dept_id
+having avg(salary)>60000;
+
+use agil_data;
+create table department(
+department_id int primary key,
+department_name varchar(50)
+);
+create table employee(
+employee_id int primary key,
+employee_name varchar(50),
+job_title varchar(50),
+manager_id int,
+dept_id int,
+salary int
+);
+insert into department values
+(1, 'HR'),
+(2, 'IT'),
+(3, 'Finance'),
+(4, 'Marketing');
+insert into employee values
+(101, 'Anu', 'Manager', NULL, 1, 60000),
+(102, 'Priya', 'Developer', 101, 2, 50000),
+(103, 'Rahul', 'Tester', 101, 2, 35000),
+(104, 'Kavi', 'Analyst', 102, 3, 45000),
+(105, 'Arun', 'Developer', 101, 1, 40000);
+
+-- emp name, job title and dept using inner join
+select e.employee_name, e.job_title, d.department_name
+from employee e
+inner join department d
+on e.dept_id=d.department_id;
+
+-- employees with manager name
+select e.employee_name as emp, m.employee_name as manager
+from employee e
+join employee m
+on e.manager_id=m.employee_id;
+
+-- all dept with employee count
+select d.department_name, count(employee_id)
+from department d
+left join employee e
+on d.department_id=e.dept_id
+group by department_name;
+
+-- all dept with employee count
+select d.department_name, e.employee_name
+from department d
+right join employee e
+on d.department_id=e.dept_id
+
+-- empl earning more than avg salary
+use agil_data;
+select employee_name, salary 
+from employee
+where salary>(
+select avg(salary)
+from employee
+);
+
+-- employees earning more than their manager's salary
+select e.employee_name, e.salary, m.employee_name as manager_name, m.salary as manager_salary
+from employee e
+inner join employee m
+on e.manager_id=m.employee_id
+where e.salary>m.salary;
+
+-- dept earning more than 200000
+select d.department_id, d.department_name, SUM(e.salary) AS total_salary
+from department d
+inner join employee e
+on d.department_id = e.dept_id
+group by d.department_id, d.department_name
+having sum(e.salary) > 200000;
+
+-- get all job titles from emplyee and managers using union
+select e.job_title
+from employee e
+union
+select m.job_title
+from employee e
+inner join employee m
+on e.manager_id=m.employee_id;
+
+-- Use INTERSECT to find common departments between two result sets
+select dept_id from employee
+intersect
+select department_id from department;
+
