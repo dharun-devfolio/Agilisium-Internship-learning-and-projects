@@ -313,3 +313,48 @@ WHERE e.salary > (SELECT m.salary FROM employees m WHERE m.emp_id = e.manager_id
 SELECT dept_id, dept_name
 FROM departments
 WHERE dept_id IN (SELECT dept_id FROM employees GROUP BY dept_id HAVING SUM(salary) > 200000);
+
+
+-- Day 9 
+
+CREATE TABLE managers (
+    mgr_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    job_title VARCHAR(50),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+
+-- Setup: insert rows into managers
+INSERT INTO managers (mgr_id, first_name, last_name, job_title, dept_id)
+VALUES
+(101, 'Arjun', 'Mehta', 'CEO', NULL),
+(102, 'Priya', 'Nair', 'Sales Manager', 1),
+(106, 'Kavya', 'Menon', 'HR Manager', 2),
+(109, 'Karthik', 'Subramanian', 'Engineering Manager', 3),
+(110, 'Divya', 'Krishnan', 'Senior Software Engineer', 3),
+(114, 'Lakshmi', 'Venkatesh', 'Finance Manager', 4),
+(117, 'Arun', 'Kumar', 'Marketing Manager', 5),
+(120, 'Deepa', 'Raman', 'Support Lead', 6),
+(123, 'Varun', 'Malhotra', 'Data Science Lead', 7),
+(201, 'Rekha', 'Iyengar', 'Head of Legal', 9),
+(202, 'Sameer', 'Khan', 'QA Manager', 11);
+
+-- Get list of all job titles from employees and managers tables using UNION
+SELECT job_title
+FROM employees
+UNION
+SELECT job_title
+FROM managers
+ORDER BY job_title;
+
+-- Use INTERSECT to find common departments between two result sets
+SELECT d.dept_id, d.dept_name
+FROM employees e
+JOIN departments d ON e.dept_id = d.dept_id
+INTERSECT
+SELECT d.dept_id, d.dept_name
+FROM managers m
+JOIN departments d ON m.dept_id = d.dept_id
+ORDER BY dept_id;
