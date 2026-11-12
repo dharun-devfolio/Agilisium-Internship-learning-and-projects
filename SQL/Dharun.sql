@@ -334,3 +334,84 @@ WHERE department_id IN (
     GROUP BY department_id
     HAVING SUM(salary) > 200000
 );
+
+-- DAY-9 (Set Operations)
+
+#Get a list of all job titles from employees and managers using UNION
+
+SELECT job_title FROM employees
+UNION
+SELECT m.job_title FROM employees e
+JOIN employees m
+ON e.manager_id = m.employee_id;
+
+#Use INTERSECT to find common departments between two result sets (intersect is not supported so i used join)
+
+SELECT DISTINCT d.department_name FROM departments d
+JOIN employees e
+    ON d.department_id = e.department_id
+JOIN employees m
+    ON d.department_id = m.department_id
+JOIN employees reporting
+    ON reporting.manager_id = m.employee_id;
+
+-- DAY - 10
+use company_db;
+-- Task 1: Convert all employee names into uppercase
+SELECT
+    employee_name,
+    UPPER(employee_name) AS uppercase_name
+FROM employees;
+
+
+-- Task 2: Convert employee names into lowercase
+SELECT
+    employee_name,
+    LOWER(employee_name) AS lowercase_name
+FROM employees;
+
+
+-- Task 3: Find the length of each employee name
+SELECT
+    employee_name,
+    LENGTH(employee_name) AS name_length
+FROM employees;
+
+
+-- Task 4: Combine employee name and job title
+SELECT
+    CONCAT(employee_name, ' - ', job_title) AS employee_details
+FROM employees;
+
+
+-- Task 6: Extract the first three characters using LEFT()
+SELECT
+    employee_name,
+    LEFT(employee_name, 3) AS first_three
+FROM employees;
+
+
+-- Task 7: Extract the last three characters using RIGHT()
+SELECT
+    employee_name,
+    RIGHT(employee_name, 3) AS last_three
+FROM employees;
+
+
+-- Task 8: Remove unnecessary spaces using TRIM()
+SELECT
+    TRIM('   Dharun   ') AS clean_name;
+
+
+-- Task 9: Replace Engineer with Developer in job titles
+SELECT
+    job_title,
+    REPLACE(job_title, 'Engineer', 'Developer') AS updated_title
+FROM employees;
+
+
+-- Task 10: Reverse employee names
+SELECT
+    employee_name,
+    REVERSE(employee_name) AS reversed_name
+FROM employees;
