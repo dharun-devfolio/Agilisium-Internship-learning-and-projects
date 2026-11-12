@@ -236,4 +236,37 @@ WHERE department_id IN (
     HAVING SUM(salary) > 200000
 );
 
--- DAY-9
+-- DAY-9 (Set Operations)
+
+#Get a list of all job titles from employees and managers using UNION
+
+SELECT job_title FROM employees
+UNION
+SELECT m.job_title FROM employees e
+JOIN employees m
+ON e.manager_id = m.employee_id;
+
+#Use INTERSECT to find common departments between two result sets (intersect is not supported so i used join)
+
+SELECT DISTINCT d.department_name FROM departments d
+JOIN employees e
+    ON d.department_id = e.department_id
+JOIN employees m
+    ON d.department_id = m.department_id
+JOIN employees reporting
+    ON reporting.manager_id = m.employee_id;
+    
+
+-- DAY-10 (String Functions)
+
+#Display employee names in UPPERCASE
+SELECT employee_name, UPPER(employee_name) AS uppercase_name FROM employees;
+
+# Extract the first 3 characters of each job title
+SELECT job_title, SUBSTRING(job_title, 1, 3) AS short_job_title FROM employees;
+
+# Remove spaces from department names
+SELECT department_name, TRIM(department_name) AS clean_department_name FROM departments;
+
+
+-- DAY-11 (Date & Time Functions )
